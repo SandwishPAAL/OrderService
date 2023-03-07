@@ -2,21 +2,7 @@
 
 namespace lbs\order\services;
 
-use Illuminate\Database\Capsule\Manager as DB;
 
-$db = new DB();
-$db->addConnection([
-    'driver' => 'mysql',
-    'host' => 'order.db',
-    'database' => 'order_lbs',
-    'username' => 'order_lbs',
-    'password' => 'order_lbs',
-    'charset' => 'utf8',
-    'collation' => 'utf8_unicode_ci',
-    'prefix' => ''
-]);
-$db->setAsGlobal();
-$db->bootEloquent();
 
 use lbs\order\models\Commande;
 
