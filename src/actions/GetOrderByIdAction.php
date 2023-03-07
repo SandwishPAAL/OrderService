@@ -11,8 +11,13 @@ final class GetOrderByIdAction
     public function __invoke(Request $rq, Response $rs, mixed $args)
     {
         $order = OrderCommandeService::getById($args["id"]);
+        $data = [
+            "type" => "collection",
+            "count" => count($order),
+            "order" => $order,
+        ];
         $rs = $rs->withHeader('Content-type', 'application/json');
-        $rs->getBody()->write($order);
+        $rs->getBody()->write(json_encode($data));
 
         return $rs;
     }
