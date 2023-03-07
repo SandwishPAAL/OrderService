@@ -31,4 +31,9 @@ class OrderCommandeService
     {
         return Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->where('id', '=', $id)->first()->toJson(JSON_PRETTY_PRINT);
     }
+
+    public static function getItems(string $id)
+    {
+        return Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->where('id', '=', $id)->first()->items()->get()->toArray();
+    }
 }
