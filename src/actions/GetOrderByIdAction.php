@@ -10,8 +10,10 @@ final class GetOrderByIdAction
 {
     public function __invoke(Request $rq, Response $rs, mixed $args)
     {
-        $itemsOption = $rq->getQueryParams()["embed"] ?? null;
-        $order = OrderCommandeService::getById($args["id"], $itemsOption);
+        $itemsOption = isset($rq->getQueryParams()["embed"]) ? true : false;
+
+        $order = $itemsOption ? OrderCommandeService::getById($args["id"]) : OrderCommandeService::getItems($args["id"]);
+
         $rs = $rs->withHeader('Content-type', 'application/json');
         $rs->getBody()->write($order);
 
