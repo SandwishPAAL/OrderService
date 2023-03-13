@@ -19,12 +19,12 @@ $app->addErrorMiddleware(true, false, false);
  * configuring API Routes
  */
 
-$app->get('/orders', GetOrdersAction::class);
+$app->get('/orders', GetOrdersAction::class)->setName('orders');
 
-$app->get('/orders/{id}', GetOrderByIdAction::class);
+$app->get('/orders/{id}', GetOrderByIdAction::class)->setName('orderById');
 
-$app->get('/orders/{id}/items', GetItemByCommande::class);
+$app->get('/orders/{id}/items', GetItemByCommande::class)->setName('itemsByCommand');
 
-$app->put('/orders/{id}', UpdateOrderAction::class);
+$app->put('/orders/{id}', UpdateOrderAction::class)->setName('orderUpdate');
 
 $app->run();
