@@ -11,13 +11,12 @@ final class GetOrderByIdAction
 {
     public function __invoke(Request $rq, Response $rs, mixed $args)
     {
-        $itemsOption = isset($rq->getQueryParams()["embed"]) ? true : false;
+        $itemsOption = isset($rq->getQueryParams()["embed"]) && $rq->getQueryParams()["embed"] === "items" ? true : false;
 
         $order = $itemsOption ? OrderCommandeService::getById($args["id"]) : OrderCommandeService::getItems($args["id"]);
 
         $routeParser = RouteContext::fromRequest($rq)->getRouteParser();
 
-        $order = OrderCommandeService::getById($args["id"]);
         $data = [
             "type" => "resource",
             "order" => $order,
