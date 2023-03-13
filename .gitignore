@@ -76,5 +76,5 @@ composer.phar
 *.log
 vendor/
 composer.phar
-
+/.composer.lock
 /.env
