@@ -2,29 +2,24 @@
 
 namespace lbs\order\services;
 
-
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use lbs\order\models\Commande;
 
 class OrderCommandeService
 {
-    public static function getAll()
+    public static function getAll($client)
     {
-        $array = Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->get()->toArray();
+        $query = Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount');
 
-
-        foreach($array as $item){
-
-            echo $item6->id;
-
-            // $query = `/orders/$item->id`;
-            // $string = array('href' => $query);
-            // echo json_encode($string);
-
-            // json_encode(array_merge(json_decode($item, true),json_decode($string, true)));
-
+        if ($client) {
+            $query = $query->where('nom', '=', $client);
         }
-        //return $array;
+
+        try {
+            return $query->get()->toArray();
+        } catch (ModelNotFoundException $e) {
+            throw $e;
+        }
     }
 
     public static function getById(string $id)

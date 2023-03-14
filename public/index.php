@@ -41,7 +41,7 @@ $errorMiddleware->getDefaultErrorHandler()->registerErrorRenderer('application/j
 
 $app->get('/orders', GetOrdersAction::class);
 
-$app->get('/orders/{id}', GetOrderByIdAction::class);
+$app->get('/orders/{id}', GetOrderByIdAction::class)->setName('orderById');
 
 $app->put('/orders/{id}', UpdateOrderAction::class);
 
