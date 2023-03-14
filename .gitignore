@@ -80,3 +80,5 @@ composer.phar
 /.env
 
 .vscode/
+
+.gitignore

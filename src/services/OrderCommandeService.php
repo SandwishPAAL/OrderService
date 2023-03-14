@@ -2,6 +2,7 @@
 
 namespace lbs\order\services;
 
+use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 
 $db = new DB();
@@ -19,6 +20,8 @@ $db->setAsGlobal();
 $db->bootEloquent();
 
 use lbs\order\models\Commande;
+use Slim\Exception\HttpNotFoundException;
+use Throwable;
 
 class OrderCommandeService
 {
@@ -27,9 +30,18 @@ class OrderCommandeService
         return Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->get()->toJson(JSON_PRETTY_PRINT);
     }
 
-    public static function getById(string $id)
+    public static function getById(string $id, string $embed)
     {
-        return Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->where('id', '=', $id)->first()->toJson(JSON_PRETTY_PRINT);
+        $query = Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->where('id', '=', $id)->first();
+        if ($embed === 'items') {
+            $query = $query->items();
+        }
+
+        try {
+            return $query->firstOrFail()->get()->toArray();
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public static function getItems(string $id)

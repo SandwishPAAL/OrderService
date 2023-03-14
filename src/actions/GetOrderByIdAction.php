@@ -6,14 +6,21 @@ use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Slim\Routing\RouteContext;
 use lbs\order\services\OrderCommandeService;
+use Slim\Exception\HttpBadRequestException;
+use Slim\Exception\HttpNotFoundException;
+use Throwable;
 
 final class GetOrderByIdAction
 {
     public function __invoke(Request $rq, Response $rs, mixed $args)
     {
-        $itemsOption = isset($rq->getQueryParams()["embed"]) && $rq->getQueryParams()["embed"] === "items" ? true : false;
+        $embed = $rq->getQueryParams()["embed"] ?? null;
 
-        $order = $itemsOption ? OrderCommandeService::getById($args["id"]) : OrderCommandeService::getItems($args["id"]);
+        try {
+            $order = OrderCommandeService::getById($args["id"], $embed);
+        } catch (HttpNotFoundException $e) {
+            throw new HttpNotFoundException($rq, "ressource not found");
+        }
 
         $routeParser = RouteContext::fromRequest($rq)->getRouteParser();
 
