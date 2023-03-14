@@ -14,7 +14,8 @@ final class GetOrdersAction
         $data = [
             "type" => "collection",
             "count" => count($orders),
-            "items" => $orders,
+            "orders" => $orders,
+            
         ];
         $rs = $rs->withHeader('Content-type', 'application/json');
         $rs->getBody()->write(json_encode($data));
