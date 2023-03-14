@@ -19,7 +19,7 @@ final class GetOrderByIdAction
         try {
             $order = OrderCommandeService::getById($args["id"], $embed);
         } catch (HttpNotFoundException $e) {
-            throw new HttpNotFoundException($rq, "ressource not found");
+            throw $e;
         }
 
         $routeParser = RouteContext::fromRequest($rq)->getRouteParser();
@@ -33,7 +33,7 @@ final class GetOrderByIdAction
             ]
         ];
         $rs = $rs->withHeader('Content-type', 'application/json');
-        $rs->getBody()->write(json_encode($data));
+        $rs->getBody()->write(json_encode($data, JSON_PRETTY_PRINT));
 
         return $rs;
     }
