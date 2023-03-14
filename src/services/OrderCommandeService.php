@@ -2,9 +2,7 @@
 
 namespace lbs\order\services;
 
-use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 $db = new DB();
 $db->addConnection([
@@ -21,28 +19,17 @@ $db->setAsGlobal();
 $db->bootEloquent();
 
 use lbs\order\models\Commande;
-use Slim\Exception\HttpNotFoundException;
-use Throwable;
 
 class OrderCommandeService
 {
     public static function getAll()
     {
-        return Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->get()->toJson(JSON_PRETTY_PRINT);
+        return Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->get()->toArray();
     }
 
-    public static function getById(string $id, string $embed)
+    public static function getById(string $id)
     {
-        $query = Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->where('id', '=', $id);
-        if ($embed === 'items') {
-            $query = $query->with('items');
-        }
-
-        try {
-            return $query->firstOrFail()->toArray();
-        } catch (ModelNotFoundException $e) {
-            throw $e;
-        }
+        return Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->where('id', '=', $id)->first()->toArray();
     }
 
     public static function getItems(string $id)
