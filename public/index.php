@@ -5,7 +5,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Slim\Factory\AppFactory;
-use lbs\order\actions\GetOrdersAction;
+use lbs\order\actions\GetItemByCommande;
 use lbs\order\actions\UpdateOrderAction;
 use lbs\order\actions\GetOrderByIdAction;
 use lbs\order\errors\renderer\JsonErrorRenderer;
@@ -39,10 +39,12 @@ $errorMiddleware->getDefaultErrorHandler()->registerErrorRenderer('application/j
  * configuring API Routes
  */
 
-$app->get('/orders', GetOrdersAction::class);
+$app->get('/orders', GetOrdersAction::class)->setName('orders');
 
 $app->get('/orders/{id}', GetOrderByIdAction::class)->setName('orderById');
 
-$app->put('/orders/{id}', UpdateOrderAction::class);
+$app->get('/orders/{id}/items', GetItemByCommande::class)->setName('itemsByCommand');
+
+$app->put('/orders/{id}', UpdateOrderAction::class)->setName('orderUpdate');
 
 $app->run();
