@@ -25,11 +25,26 @@ final class GetOrdersAction
 
         $data = [
             "type" => "collection",
-            "count" => count($orders),
+            "count" => $orders["totalCount"],
+            "size" => count($orders["items"]),
+            "links" => [
+                "next" => [
+                    "href" => $routeParser->urlFor("orders", [], ["page" => $page + 1 > ($orders["totalCount"] / count($orders["items"])) ? $orders["pageNumberMax"] : $page + 1])
+                ],
+                "prev" => [
+                    "href" => $routeParser->urlFor("orders", [], ["page" => $page - 1  < 1 ? 1 : $page - 1])
+                ],
+                "last" => [
+                    "href" => $routeParser->urlFor("orders", [], ["page" => $orders["pageNumberMax"]])
+                ],
+                "first" => [
+                    "href" => $routeParser->urlFor("orders", [], ["page" => 1])
+                ]
+            ],
             "orders" => []
         ];
 
-        foreach ($orders as $key => $order) {
+        foreach ($orders["items"] as $key => $order) {
             $data["orders"][$key]["order"] = $order;
             $data["orders"][$key]["order"]["links"]["self"]["href"] =  $routeParser->urlFor("orderById", ["id" => $order["id"]]);
         }

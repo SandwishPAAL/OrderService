@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
-echo __DIR__ . '/../vendor/autoload.php';
 
 use Slim\Factory\AppFactory;
 use lbs\order\actions\GetItemByCommande;
 use lbs\order\actions\UpdateOrderAction;
 use lbs\order\actions\GetOrderByIdAction;
+use lbs\order\actions\GetOrdersAction;
 use lbs\order\errors\renderer\JsonErrorRenderer;
 use Illuminate\Database\Capsule\Manager as DB;
 
