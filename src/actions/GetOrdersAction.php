@@ -13,9 +13,10 @@ final class GetOrdersAction
     public function __invoke(Request $rq, Response $rs, mixed $args)
     {
         $client = $rq->getQueryParams()["c"] ?? null;
+        $page = $rq->getQueryParams()["page"] ?? null;
 
         try {
-            $orders = OrderCommandeService::getAll($client);
+            $orders = OrderCommandeService::getAll($client, $page);
         } catch (HttpNotFoundException $e) {
             throw $e;
         }

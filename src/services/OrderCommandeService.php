@@ -24,16 +24,29 @@ use lbs\order\models\Commande;
 
 class OrderCommandeService
 {
-    public static function getAll($client)
+    public static function getAll($client, int $page)
     {
+
+        $items_per_page = 10;
+
+        if (is_null($page)) {
+            $page = 1;
+        }
+
         $query = Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount');
 
         if ($client) {
             $query = $query->where('nom', '=', $client);
         }
 
+        $orders_number = $query->count();
+
+        $pages = ceil($orders_number / $items_per_page);
+
+        $premier = ($page * $items_per_page) - $items_per_page;
+
         try {
-            return $query->get()->toArray();
+            return $query->offset($premier)->limit($items_per_page)->get()->toArray();
         } catch (ModelNotFoundException $e) {
             throw $e;
         }
