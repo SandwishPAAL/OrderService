@@ -24,7 +24,7 @@ use lbs\order\models\Commande;
 
 class OrderCommandeService
 {
-    public static function getAll($client, $page)
+    public static function getAll($client, $page, $sort)
     {
 
         $items_per_page = 10;
@@ -33,6 +33,12 @@ class OrderCommandeService
 
         if ($client) {
             $query = $query->where('nom', '=', $client);
+        }
+        if ($sort === "date") {
+            $query = $query->orderBy('order_date', 'DESC');
+        }
+        if ($sort === "amount") {
+            $query = $query->orderBy('total_amount', 'DESC');
         }
 
 

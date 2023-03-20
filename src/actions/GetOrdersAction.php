@@ -14,9 +14,10 @@ final class GetOrdersAction
     {
         $client = $rq->getQueryParams()["c"] ?? null;
         $page = $rq->getQueryParams()["page"] ?? null;
+        $sort = $rq->getQueryParams()["sort"] ?? null;
 
         try {
-            $orders = OrderCommandeService::getAll($client, $page);
+            $orders = OrderCommandeService::getAll($client, $page, $sort);
         } catch (HttpNotFoundException $e) {
             throw $e;
         }
