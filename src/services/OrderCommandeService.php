@@ -45,7 +45,7 @@ class OrderCommandeService
 
     public static function getById(string $id, string $embed) : array
     {
-        // return Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->where('id', '=', $id)->first()->toArray();
+
         $query = Commande::select('id', 'mail as client_mail', 'nom as client_nom', 'created_at as order_date', 'livraison as delivery_date', 'montant as total_amount')->where('id', '=', $id);
         if ($embed === 'items') {
             $query = $query->with('items');
