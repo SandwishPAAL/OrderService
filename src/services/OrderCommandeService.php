@@ -45,17 +45,16 @@ class OrderCommandeService
         $page = is_null($page) ?? 1;
 
         $page = $page > ceil($query->count() / $items_per_page) ? ceil($query->count() / $items_per_page) : $page;
+        $pages = ceil($query->count() / $items_per_page);
 
-        if ($page > ceil($query->count() / $items_per_page)) {
-            $page = ceil($query->count() / $items_per_page);
-        }
+
 
 
         try {
             $data = [
                 "pageNumberMax" => ceil($query->count() / $items_per_page),
                 "totalCount" => $query->count(),
-                "items" => $query->forPage($page, $items_per_page)->get()->toArray()
+                "items" => $query->forPage($pages, $items_per_page)->get()->toArray()
             ];
             return $data;
         } catch (ModelNotFoundException $e) {
