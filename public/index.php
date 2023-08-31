@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Slim\Factory\AppFactory;
 use lbs\order\actions\GetItemByCommande;
-use lbs\order\actions\UpdateOrderAction;
 use lbs\order\actions\GetOrderByIdAction;
 use lbs\order\actions\GetOrdersAction;
+use lbs\order\actions\UpdateOrderAction;
+use lbs\actions\AuthAction;
+use lbs\actions\RefreshTokenAction;
+use lbs\middleware\JwtMiddleware;
 use lbs\order\errors\renderer\JsonErrorRenderer;
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -34,11 +36,14 @@ $errorMiddleware = $app->addErrorMiddleware(true, false, false);
 $errorMiddleware->getDefaultErrorHandler()->forceContentType('application/json');
 $errorMiddleware->getDefaultErrorHandler()->registerErrorRenderer('application/json', JsonErrorRenderer::class);
 
-
+$app->add(new JwtMiddleware("3fa8f92857a74abb950df8ce83a7d2ee"));
 
 /**
  * configuring API Routes
  */
+
+$app->post('/auth', AuthAction::class);
+$app->post('/refresh', RefreshTokenAction::class);
 
 $app->get('/orders', GetOrdersAction::class)->setName('orders');
 
